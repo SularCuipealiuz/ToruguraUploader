@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登録用アップローダー</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        #upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .file-link {
+            margin-top: 10px;
+        }
+        .uploading {
+            color: orange;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<h1>登録用アップローダー</h1>
+<div id="upload-area">ここにファイルをドラッグ＆ドロップするか、クリックしてアップロード</div>
+<input type="file" id="file-input" multiple style="display: none;">
+<div id="file-links"></div>
+<script src="uploader.js"></script>
+</body>
+</html>
