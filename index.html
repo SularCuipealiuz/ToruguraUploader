@@ -65,7 +65,6 @@
     <!-- File Links Container -->
     <div id="file-links"></div>
 </div>
-
 <script>
     const uploadAreaResize = document.getElementById("upload-area-resize");
     const uploadAreaCompress = document.getElementById("upload-area-compress");
@@ -201,6 +200,11 @@
 
                 canvas.width = width;
                 canvas.height = height;
+
+                // 填充透明背景
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // 繪製圖片
                 ctx.drawImage(img, 0, 0, width, height);
 
                 canvas.toBlob(
@@ -211,7 +215,7 @@
                             reject(new Error("画像のリサイズに失敗しました"));
                         }
                     },
-                    "image/jpeg"
+                    "image/png"
                 );
             };
 
@@ -235,6 +239,11 @@
 
                 canvas.width = width;
                 canvas.height = height;
+
+                // 填充透明背景
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // 繪製圖片
                 ctx.drawImage(img, 0, 0, width, height);
 
                 canvas.toBlob(
@@ -245,7 +254,7 @@
                             reject(new Error("画像の圧縮に失敗しました"));
                         }
                     },
-                    "image/jpeg",
+                    "image/png",
                     0.7
                 );
             };
@@ -272,6 +281,11 @@
 
                     canvas.width = width;
                     canvas.height = height;
+
+                    // 填充透明背景
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                    // 繪製圖片
                     ctx.drawImage(img, 0, 0, width, height);
 
                     canvas.toBlob(
@@ -284,14 +298,14 @@
                                     (compressedBlob) => {
                                         resolve(compressedBlob);
                                     },
-                                    "image/jpeg",
+                                    "image/png",
                                     quality
                                 );
                             } else {
                                 reject(new Error("圧縮に失敗しました"));
                             }
                         },
-                        "image/jpeg",
+                        "image/png",
                         0.7
                     );
                 };
