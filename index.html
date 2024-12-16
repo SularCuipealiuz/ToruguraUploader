@@ -62,14 +62,24 @@
     </div>
     <input type="file" id="file-input-compress" accept="image/*" style="display: none;">
 
+    <!-- Upload Area for GIF -->
+    <div class="upload-area" id="upload-area-gif">
+        GIFファイルをドラッグ＆ドロップするか、クリックしてファイルを選択してください
+    </div>
+    <input type="file" id="file-input-gif" accept="image/gif" style="display: none;">
+
     <!-- File Links Container -->
     <div id="file-links"></div>
 </div>
 <script>
     const uploadAreaResize = document.getElementById("upload-area-resize");
     const uploadAreaCompress = document.getElementById("upload-area-compress");
+    const uploadAreaGif = document.getElementById("upload-area-gif");
+
     const fileInputResize = document.getElementById("file-input-resize");
     const fileInputCompress = document.getElementById("file-input-compress");
+    const fileInputGif = document.getElementById("file-input-gif");
+
     const fileLinksContainer = document.getElementById("file-links");
 
     const apiKey = "JeMYhB2GQvn7QBfILeZwk3rHs2fquCoX";
@@ -78,6 +88,7 @@
     // Event listeners for drag-and-drop and file input
     uploadAreaResize.addEventListener("click", () => fileInputResize.click());
     uploadAreaCompress.addEventListener("click", () => fileInputCompress.click());
+    uploadAreaGif.addEventListener("click", () => fileInputGif.click());
 
     uploadAreaResize.addEventListener("dragover", (e) => {
         e.preventDefault();
@@ -316,6 +327,75 @@
             };
             reader.readAsDataURL(file);
         });
+    }
+
+    uploadAreaGif.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadAreaGif.style.borderColor = "#00f";
+    });
+    uploadAreaGif.addEventListener("dragleave", () => {
+        uploadAreaGif.style.borderColor = "#ccc";
+    });
+    uploadAreaGif.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadAreaGif.style.borderColor = "#ccc";
+        handleGifFiles(e.dataTransfer.files);
+    });
+
+    fileInputGif.addEventListener("change", (e) => handleGifFiles(e.target.files));
+
+    function handleGifFiles(files) {
+        Array.from(files).forEach((file) => {
+            if (file.type !== "image/gif") {
+                alert("GIFファイルのみアップロード可能です。");
+                return;
+            }
+            uploadGifFile(file);
+        });
+    }
+
+    function uploadGifFile(file) {
+        const listItem = document.createElement("div");
+        listItem.className = "file-link uploading";
+
+        const linkText = document.createElement("span");
+        linkText.textContent = `${file.name} - アップロード中...`;
+        listItem.appendChild(linkText);
+
+        fileLinksContainer.appendChild(listItem);
+
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append(
+            "metadata",
+            JSON.stringify({
+                name: file.name,
+                description: "GIFファイルをアップロードしました",
+            })
+        );
+
+        fetch(apiUrl, {
+            method: "POST",
+            headers: {
+                Authorization: apiKey,
+            },
+            body: formData,
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.url) {
+                    linkText.textContent = data.url;
+                    listItem.className = "file-link success";
+                    listItem.onclick = () => window.open(data.url, "_blank");
+                } else {
+                    throw new Error("アップロードに失敗しました");
+                }
+            })
+            .catch((err) => {
+                linkText.textContent = `${file.name}のアップロードエラー`;
+                listItem.className = "file-link error";
+                console.error(err);
+            });
     }
 </script>
 </body>
