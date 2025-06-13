@@ -82,7 +82,7 @@
 
     const fileLinksContainer = document.getElementById("file-links");
 
-    const apiKey = "JeMYhB2GQvn7QBfILeZwk3rHs2fquCoX";
+    const apiKey = "6bS7VeRp5B2Xyi3BcZ5GOBZBtjDLrh2q";
     const apiUrl = "https://fmapi.net/api/v2/image";
 
     // Event listeners for drag-and-drop and file input
@@ -175,7 +175,8 @@
                 body: formData,
             })
                 .then((response) => response.json())
-                .then((data) => {
+                .then((res) => {
+                    const data = res.data;
                     if (data.url) {
                         linkText.textContent = data.url;
                         listItem.className = "file-link success";
